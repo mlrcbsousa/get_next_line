@@ -6,47 +6,78 @@
 /*   By: manuel <mlrcbsousa@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 22:50:16 by manuel            #+#    #+#             */
-/*   Updated: 2021/03/23 22:32:36 by manuel           ###   ########.fr       */
+/*   Updated: 2021/03/25 23:40:27 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+
+int	gnl_file(int fd, char **str, char *buf)
+{
+	ssize_t	size;
+	char	*tmp;
+
+	size = read(fd, buf, BUFFER_SIZE);
+	if (size < 1)
+		return (size);
+	buf[size] = '\0';
+	if (!*str)
+		*str = ft_strdup(buf);
+	else
+	{
+		tmp = ft_strjoin(*str, buf);
+		free(*str);
+		*str = tmp;
+	}
+	if (!*str)
+		return (-1);
+	return (1);
+}
+
+int	gnl_set_line(char **str, char **line, char *end)
+{
+	char	*tmp;
+
+	if (end)
+	{
+		tmp = ft_strdup(end + 1);
+		*end = '\0';
+		*line = ft_strdup(*str);
+		free(*str);
+		*str = tmp;
+		return (1);
+	}
+	else if (*str)
+	{
+		*line = ft_strdup(*str);
+		free(*str);
+		*str = NULL;
+	}
+	else
+		*line = ft_strdup("\0");
+	return (0);
+}
 
 int	get_next_line(int fd, char **line)
 {
-	int		size;
-	char	*buf;
+	static char	*str;
+	int			status;
+	char		*buf;
+	char		*end;
 
-	(void)line;
-	if (fd == -1)
+	if (!line || BUFFER_SIZE < 1 || fd < 0)
 		return (-1);
 	buf = (char *)malloc(sizeof(*buf) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (-1);
-	size = read(fd, buf, BUFFER_SIZE);
-	if (size >= 0)
+	status = 1;
+	while (!ft_strchr(str, '\n') && status == 1)
+		status = gnl_file(fd, &str, buf);
+	free(buf);
+	if (status != -1)
 	{
-		*(buf + size) = '\0';
-		*line = buf;
+		end = ft_strchr(str, '\n');
+		status = gnl_set_line(&str, line, end);
 	}
-	printf("size: %d\n", size);
-	if (size < 1)
-	{
-		if (size == -1)
-			free(buf);
-		return (size);
-	}
-		/*
-	while ((size = read(fd, buf, BUFFER_SIZE)))
-	{
-		if (size == -1)
-		{
-			put_errno(self, filepath);
-			break ;
-		}
-		buf[size] = 0;
-		ft_putstr(buf);
-	}*/
-	return (1);
+	return (status);
 }

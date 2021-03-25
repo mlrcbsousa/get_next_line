@@ -5,3 +5,6 @@
 .get_next_line_utils_bonus.c.swp
 .get_next_line_utils.c.swp
 gnlTester/
+main.c
+.main.c.swp
+a.out
