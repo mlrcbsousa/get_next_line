@@ -6,7 +6,7 @@
 /*   By: manuel <mlrcbsousa@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 20:16:53 by manuel            #+#    #+#             */
-/*   Updated: 2021/03/25 23:40:58 by manuel           ###   ########.fr       */
+/*   Updated: 2021/03/25 23:51:29 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,3 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_strcpy(str + len1, s2);
 	return (str);
 }
-
