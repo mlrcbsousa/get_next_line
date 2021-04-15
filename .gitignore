@@ -8,3 +8,7 @@ gnlTester/
 main.c
 .main.c.swp
 a.out
+42TESTERS-GNL/
+42cursus_gnl_tests/
+get-next-line-testing-tools/
+tester.sh
